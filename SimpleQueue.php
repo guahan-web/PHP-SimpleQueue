@@ -1,8 +1,17 @@
 <?php
 /**
- * Callbacks must provide a boolean TRUE or FALSE upon completion. If successful, item
- * will be automatically dequeue, otherwise, it will be requeue and the attempts will
- * be incremented.
+ * @fileoverview
+ * This file defines the logic of the SimpleQueue object
+ * 
+ * @author Garth Henson (http://www.guahanweb.com)
+ * @since 1.0
+ * @version 1.0
+ */
+
+/**
+ * SimpleQueue
+ *
+ * @author Garth Henson (http://www.guahawneb.com)
  */
 class SimpleQueue {
     protected $limit   = 0;
