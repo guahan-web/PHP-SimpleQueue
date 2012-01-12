@@ -35,6 +35,7 @@ if (NULL !== $err) {
 }
 
 // All connections are good, so let's update the DB file
+$db_content = file_get_contents(DB_FILE);
 $txt = str_replace(
 	array('$user = \'\';', '$pass = \'\';', '$host = \'\';', '$dbname = \'\';'), 
 	array('$user = \'' . $user . '\';', '$pass = \'' . $pass . '\';', '$host = \'' . $host . '\';', '$dbname = \'' . $dbname . '\';'), 
