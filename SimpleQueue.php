@@ -25,9 +25,11 @@ class SimpleQueue {
 
     protected $logger;
     protected $dequeue_time;
+    protected $conn;
 
     public function __construct() {
 	$this->logger = QueueLogger::getInstance();
+	$this->conn = SimpleQueueDB::getInstance();
     }
 
     public function setExecLimit($n) {
@@ -58,7 +60,7 @@ class SimpleQueue {
             mysql_real_escape_string($data)
         );
         
-        if (FALSE !== ($sql = mysql_query($q))) {
+        if (FALSE !== ($sql = mysql_query($q, $this->conn))) {
             $this->logger->info(sprintf('Successfully queued data: [%s] with ID [%d]',
                 $data,
                 mysql_insert_id()
@@ -81,7 +83,7 @@ class SimpleQueue {
 	    $q .= sprintf(" LIMIT %d", $this->limit);
 	}
         
-        if (FALSE === ($sql = mysql_query($q))) {
+        if (FALSE === ($sql = mysql_query($q, $this->conn))) {
             $this->logger->debugQuery($q);
             $this->logger->error(sprintf('Could not retrieve queue for context [%s]', $context));
             return FALSE;
@@ -115,7 +117,7 @@ class SimpleQueue {
 
     public function purgeQueue() {
 	$q = sprintf("DELETE FROM %s WHERE attempts >= %d", $this->table, $this->retries);
-	if (FALSE === ($sql = @mysql_query($q))) {
+	if (FALSE === ($sql = @mysql_query($q, $this->conn))) {
 	    $this->logger->debugQuery($q);
 	    $this->logger->error('Could not purge queue');
 	} else {
@@ -132,7 +134,7 @@ class SimpleQueue {
             intval($item['id'])
         );
         
-        if (FALSE === @mysql_query($q)) {
+        if (FALSE === @mysql_query($q, $this->conn)) {
             $this->logger->debugQuery($q);
             $this->logger->error(sprintf('Could not requeue item ID [%d]', $item['id']));
         } else {
@@ -142,7 +144,7 @@ class SimpleQueue {
     
     protected function deleteItem($id) {
         $q = sprintf("DELETE FROM %s WHERE id = %d LIMIT 1", $this->table, intval($id));
-        if (FALSE === mysql_query($q)) {
+        if (FALSE === mysql_query($q, $this->conn)) {
             $this->logger->debugQuery($q);
             $this->logger->error(sprintf("Could not delete queue ID [%d]", intval($id)));
         } else {
