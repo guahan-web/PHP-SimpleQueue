@@ -1,4 +1,5 @@
 <?php
+require('Logger.php');
 class QueueLogger extends Logger {
     private static $instance;
     private $count = 0;

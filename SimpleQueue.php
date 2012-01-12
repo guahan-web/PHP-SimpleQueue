@@ -8,6 +8,9 @@
  * @version 1.0
  */
 
+require('SimpleQueueDB.php');
+require('QueueLogger.php');
+
 /**
  * SimpleQueue
  *

@@ -84,7 +84,7 @@ body {
 	padding: 15px;
 	background-color: #EAF4F7;
 	font-family: Verdana, Helvetica, Arial, sans-serif;
-	font-weight: 12px;
+	font-size: 12px;
 }
 
 #install-form {
